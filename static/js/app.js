@@ -24,10 +24,10 @@ function buildMetadata(sample) {
 }
 
 function buildCharts(sample) {
-  console.log("I ran the function")
   // @TODO: Use `d3.json` to fetch the sample data for the plots
   d3.json(`samples/${sample}`).then(sampleData => {
     // @TODO: Build a Bubble Chart using the sample data
+
     var traceBubble = {
       x: sampleData.otu_ids,
       y: sampleData.sample_values,
@@ -43,7 +43,6 @@ function buildCharts(sample) {
     var data = [traceBubble];
 
     var layout = {
-      title:"test",
       showlegend: false,
       height: 600,
       width: 1200
@@ -54,6 +53,43 @@ function buildCharts(sample) {
     // @TODO: Build a Pie Chart
     // HINT: You will need to use slice() to grab the top 10 sample_values,
     // otu_ids, and labels (10 each).
+    
+    var tempList = [];
+    for (var i = 0; i < sampleData.sample_values.length; i++) 
+      tempList.push({'otu_id': sampleData.otu_ids[i], 'otu_label': sampleData.otu_labels[i], 'sample_value': sampleData.sample_values[i]});
+
+    tempList.sort((first, second) => second.sample_value - first.sample_value);
+
+    for (var j = 0; j < tempList.length; j++) {
+      sampleData.otu_ids[j] = tempList[j].otu_id;
+      sampleData.otu_labels[j] = tempList[j].otu_label;
+      sampleData.sample_values[j] = tempList[j].sample_value;
+  };
+
+  console.log(sampleData);
+
+  var ten_vals = sampleData.sample_values.slice(0,10);
+  var ten_ids = sampleData.otu_ids.slice(0,10);
+  var ten_labels = sampleData.otu_labels.slice(0,10);
+
+  var tracePie = {
+    values: ten_vals,
+    labels: ten_ids,
+    type:'pie',
+    text: ten_labels,
+    textinfo: 'percent',
+    hoverinfo: 'label+text+value+percent',
+  };
+
+  var data = [tracePie];
+
+  var layout = {
+    height: 600,
+    width: 600
+  }
+
+  Plotly.newPlot("pie", data, layout);
+
   });
 }
 

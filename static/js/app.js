@@ -20,6 +20,7 @@ function buildMetadata(sample) {
 
     // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
+    buildGauge(metasample.WFREQ);
   });
 }
 
@@ -66,8 +67,6 @@ function buildCharts(sample) {
       sampleData.sample_values[j] = tempList[j].sample_value;
   };
 
-  console.log(sampleData);
-
   var ten_vals = sampleData.sample_values.slice(0,10);
   var ten_ids = sampleData.otu_ids.slice(0,10);
   var ten_labels = sampleData.otu_labels.slice(0,10);
@@ -84,8 +83,8 @@ function buildCharts(sample) {
   var data = [tracePie];
 
   var layout = {
-    height: 600,
-    width: 600
+    height: 500,
+    width: 500
   }
 
   Plotly.newPlot("pie", data, layout);
